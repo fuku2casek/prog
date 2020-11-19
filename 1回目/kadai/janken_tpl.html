@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<script src="js/jquery-2.1.3.min.js"></script>
+<link rel="stylesheet" href="css/sample.css">
+<title>Last Man Standing</title>
+</head>
+<body>
+
+<header>
+  <h1></h1>
+  <img src="head.png" alt="head">
+</header>
+
+<main>
+  <div>
+    <img src="choose.jpg" alt="start">
+  </div>
+  <ul>
+    <li id="gu_btn">グー</li>
+    <li id="cho_btn">チョキ</li>
+    <li id="par_btn">パー</li>
+  </ul>
+  <div style="border: 3px solid; background-color:#1e90ff;">バイデンの出した手は？<span id="pc_hands"></span></div>
+  <div style="border: 3px solid; background-color:#dc143c;">トランプの出した手は？<span id="tr_hands"></span></div>
+  <!-- <div>トランプの出した手は？<span id="tr_hands"></span></div> -->
+  <div style="border: 3px solid; background-color:#c0c0c0;"><span id="judgment"></span></div>
+  <!-- <div id="judgment"></div> -->
+</main>
+
+<footer></footer>
+<script>
+//じゃんけん用のSCRIPTを書いてください
+
+
+$("#gu_btn").on("click",function(){
+
+const r = Math.ceil(Math.random()*3);
+console.log(r);
+
+if(r==1){
+    $("#pc_hands").html('<img src="bc.jpg">')
+    $("#tr_hands").html('<img src="tg.jpg">')
+    $("#judgment").html("勝ち");
+}
+if(r==2){
+    $("#pc_hands").html('<img src="bp.jpg">')
+    $("#tr_hands").html('<img src="tg.jpg">')
+    $("#judgment").html("敗北");
+}
+if(r==3){
+    $("#pc_hands").html('<img src="bg.jpg">')
+    $("#tr_hands").html('<img src="tg.jpg">')
+    $("#judgment").html("最高裁へ");
+}
+
+});
+
+$("#cho_btn").on("click",function(){
+
+const r = Math.ceil(Math.random()*3);
+console.log(r);
+
+if(r==1){
+    $("#pc_hands").html('<img src="bp.jpg">')
+    $("#tr_hands").html('<img src="tc.jpg">')
+    $("#judgment").html("勝ち");
+}
+if(r==2){
+    $("#pc_hands").html('<img src="bg.jpg">')
+    $("#tr_hands").html('<img src="tc.jpg">')
+    $("#judgment").html("敗北");
+}
+if(r==3){
+    $("#pc_hands").html('<img src="bc.jpg">')
+    $("#tr_hands").html('<img src="tc.jpg">')
+    $("#judgment").html("最高裁へ");
+}
+
+});
+
+$("#par_btn").on("click",function(){
+
+const r = Math.ceil(Math.random()*3);
+console.log(r);
+
+if(r==1){
+    $("#pc_hands").html('<img src="bg.jpg">')
+    $("#tr_hands").html('<img src="tp.jpg">')
+    $("#judgment").html("勝ち");
+}
+if(r==2){
+    $("#pc_hands").html('<img src="bc.jpg">')
+    $("#tr_hands").html('<img src="tp.jpg">')
+    $("#judgment").html("敗北");
+    // $("#judgment").html('<img src="loose.jpg">');
+}
+if(r==3){
+    $("#pc_hands").html('<img src="bp.jpg">')
+    $("#tr_hands").html('<img src="tp.jpg">')
+    $("#judgment").html("最高裁へ");
+}
+
+});
+    
+    
+    
+    
+    
+    
+
+</script>
+</body>
+</html>
