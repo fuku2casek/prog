@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>canvas_base.html</title>
+</head>
+
+<body>
+    <section>
+        <h1>Canvas</h1>
+        <nav>
+            <!-- 線の色を変更するHTML要素 -->
+            <input type="color" id="color" value="">
+            <!-- 線の太さを変更するHTML要素 -->
+            <input type="range" id="range" min="0" max="100" value="" >
+            <button id="clear_btn">クリアー</button>
+        </nav>
+        <canvas id="drowarea" width="500" height="500" style="background-color:#252c19;,border:1px solid blue;"></canvas>
+    
+    </section>
+    <a id="download" href="#" download="canvas.jpg">ダウンロード</a>
+    <div id="result"><img src="">
+
+    <script src="js/jquery-2.1.3.min.js"></script>
+    <script>
+        //初期化(変数letで宣言)
+        let canvas_mouse_event = false; //スイッチ [ true=線を引く, false=線は引かない ]  ＊＊＊
+        let oldX = 0; //１つ前の座標を代入するための変数
+        let oldY = 0; //１つ前の座標を代入するための変数
+        let bold_line = 0; //ラインの太さをここで指定
+        let color = 0; //ラインの色をここで指定
+
+        //------------------------------------------------
+        //const can = $("#drowarea")[0]; //CanvasElement
+        //const ctx = can.getContext("2d"); //描画するための準備！
+        //------------------------------------------------
+        //上2つのスクリプトを記述します。
+        
+        
+        const can = $("#drowarea")[0]; //CanvasElement
+        const ctx = can.getContext("2d"); //描画するための準備！
+
+        //mousedown：フラグをTrue
+        //-----------------------------------------------
+        //oldX = e.offsetX;       //MOUSEDOWNしたX横座標取得
+        //oldY = e.offsetY; //MOUSEDOWN Y高さ座標取得
+        //canvas_mouse_event=true;
+        //-----------------------------------------------
+        //上5つのスクリプトを記述します。
+        $(can).on("mousedown",function(e){
+            console.log(e);
+            oldX = e.offsetX;
+            oldY = e.offsetY;
+            canvas_mouse_event = true;
+        });
+
+        //mousemove：フラグがTrueだったら描く ※e：イベント引数取得
+        //----------------------------------------------
+        //  if(canvas_mouse_event==true){
+        //      const px = e.offsetX;
+        //      const py = e.offsetY;
+        //      ctx.strokeStyle = color;
+        //      ctx.lineWidth = bold_line;
+        //      ctx.beginPath();
+        //      ctx.lineJoin= "round";
+        //      ctx.lineCap = "round";
+        //      ctx.moveTo(oldX, oldY);
+        //      ctx.lineTo(px, py);
+        //      ctx.stroke();
+        //      oldX = px;
+        //      oldY = py;
+        //  }
+        //mousemoveイベント
+        $(can).on("mousemove",function(e){
+            console.log(e.offsetX);
+            if(canvas_mouse_event==true){
+                const px = e.offsetX;
+                const py = e.offsetY;
+                ctx.strokeStyle = color;
+                ctx.lineWidth = bold_line;
+                ctx.beginPath();
+                ctx.lineJoin= "round";
+                ctx.lineCap = "round";
+                ctx.moveTo(oldX, oldY);
+                ctx.lineTo(px, py);
+                ctx.stroke();
+                oldX = px; //入れ替え
+                oldY = py; //入れ替え
+            }
+        });
+        //mouseup：フラグをfalse
+        //------------------------------------------------
+        //    canvas_mouse_event=false;
+        //------------------------------------------------
+        $(can).on("mouseup",function(){
+            canvas_mouse_event=false;
+        });
+
+        $(can).on("mouseout",function(){
+            canvas_mouse_event=false;
+        });
+
+        //#clear_btn：クリアーボタンAction
+        //-----------------------------------------------------------------
+        //    ctx.beginPath();
+        //    ctx.clearRect(0, 0, can.width, can.height);
+        //-----------------------------------------------------------------
+        $("#clear_btn").on("click",function(){
+            ctx.beginPath();
+            ctx.clearRect(0, 0, can.width, can.height);
+        });
+
+        //ここから追記分
+        $("#color").on("change",function(){
+        const c = $(this).val();//色値の取得
+        color = c;
+    });
+
+        $("#range").on("change",function(){
+        const r = $(this).val(); //スライダーの値を取得
+        bold_line = r;
+    });
+
+    $("#download").click(function(){
+      canvas = document.getElementById('canvas');
+      var base64 = canvas.toDataURL("image/jpeg");
+      document.getElementById("download").href = base64;
+    });
+ 
+    // function setBgColor(){
+    //   // canvasの背景色を設定(指定がない場合にjpeg保存すると背景が黒になる)
+    //   ctx.fillStyle = bgColor;
+    //   ctx.fillRect(0,0,cnvWidth,cnvHeight);
+    // }
+    
+    </script>
+</body>
+
+</html>
