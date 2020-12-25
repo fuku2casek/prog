@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Map:Geolocation</title>
+<style>html,body{height:100%;}body{padding:0;margin:0;}h1{padding:0;margin:0;font-size:50%;}</style>
+</head>
+<body>
+
+
+<!-- MAP[START] -->
+<h1>Map:Geolocation</h1>
+<input type="button" id="btn" value="送信"><br>
+現在地緯度: <input type="text" id="lat" value="43.071951">
+現在地経度: <input type="text" id="lon" value="141.360607">
+<div>
+    アクセスキーを入力<input id="key" value="b8829a21b9447f106f2d6ce5fa543c92" type="text" size="45">
+    <input type="button" id="btn" value="送信"><br>
+    
+</div>
+<div id="myMap" style='width:60%;height:70%;float:left;'></div>
+
+<table id="table">
+    <tr>
+        <th>店舗名</th>
+        <th>営業時間</th>
+    </tr>
+</table>
+<!-- MAP[END] -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
+<script src='https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=[ *** YOUR MY KEY *** ]' async defer></script>
+<script src="../js/BmapQuery.js"></script>
+<script>
+//****************************************************************************************
+// BingMaps&BmapQuery
+//****************************************************************************************
+//Init
+function GetMap(){
+    //------------------------------------------------------------------------
+    //1. Instance
+    //------------------------------------------------------------------------
+    const map = new Bmap("#myMap");
+
+    //------------------------------------------------------------------------
+    //2. geolocation: Display Map
+    //   map.geolocation(function(data:object){...});
+    //------------------------------------------------------------------------
+    map.geolocation(function(data) {
+        //location
+        const lat = data.coords.latitude;
+        const lon = data.coords.longitude;
+        //Map
+        map.startMap(lat, lon, "load", 10);
+        //pin
+        map.pin(lat,lon,"#ff0000");
+
+        
+
+    });
+
+    // Location オブジェクトの生成（プッシュピンを表示する経緯度に設定）
+    var location = new Microsoft.Maps.Location(35.69406262352407, 139.72832623668495);
+
+// Pushpin オブジェクトの生成
+var pin = new Microsoft.Maps.Pushpin(location, { text: 'H' });
+
+// 地図へプッシュピンを追加
+map.entities.push(pin);
+
+}
+
+//*****************************************************
+            // Click Event
+            // ぐるなびAPIへデータRequest → APIサーバーからresponseデータ取得
+            //*****************************************************
+            $("#btn").on("click", function() {
+                //送信データをObject変数で用意
+                //参考URL:https://api.gnavi.co.jp/api/manual/restsearch/
+                const data = {
+                    keyid:$("#key").val(),
+                    latitude:$("#lat").val(),
+                    longitude:$("#lon").val(),
+                    range:3
+                };
+                //Ajax（非同期通信）
+                axios.get('https://api.gnavi.co.jp/RestSearchAPI/v3/', {
+                    params:data
+                })
+                    .then(function (response) {
+                    //データ受信成功！！showData関数にデータを渡す
+                    showData(response.data);
+                }).catch(function (error) {
+                    console.log(error);//通信Error
+                }).then(function () {
+                    //console.log("Last");//通信OK/Error後に処理を必ずさせたい場合
+                });
+            });
+
+            //*****************************************************
+            //ぐるなびデータ表示処理
+            //*****************************************************
+            function showData(data){
+                //データ確認用
+                console.log(data.rest);
+
+                //データを繰り返し処理で取得
+                const len  = data.rest.length; //データ数を取得
+                for( let i=0; i<len; i++){
+                    $("#table").append('<tr><td>' + data.rest[i].name + '</td><td>' + data.rest[i].opentime + '</td></tr>');
+                };
+            }
+
+</script>
+</body>
+</html>
